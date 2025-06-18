@@ -4,7 +4,7 @@ Programming Shooting retoro mini game in Typescript
 
 [![screenshot](screen.png)](https://myurioka.github.io/barragewasm/)
 
-[Play in browser](https://myurioka.github.io/barragewasm)
+[Play in browser](https://myurioka.github.io/barrage)
 
 ### How to play (Control)
 
