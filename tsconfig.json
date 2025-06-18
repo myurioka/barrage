@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "module": "esnext",
+        "target": "es2023",
+        "strict": true,
+        "outDir": "./dist",
+        "lib": [
+            "es2023",
+            "dom"
+        ],
+        "moduleResolution": "bundler"
+    },
+    "include": [
+        "./src/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
