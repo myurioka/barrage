@@ -1,6 +1,6 @@
 # BARRAGE 👾
 
-Programming Shooting retoro mini game in Typescript & WebAssembly
+Programming Shooting retoro mini game in Typescript
 
 [![screenshot](screen.png)](https://myurioka.github.io/barragewasm/)
 
@@ -10,18 +10,18 @@ Programming Shooting retoro mini game in Typescript & WebAssembly
 
 -   Mouse Operation : Ship Moving
 -   Space key : Operates & Shooting
+-   Special mode: If you don't shoot for a while.
 
 ### Requirement
 
 -   TypeScript, JavaScript
--   AssemblyScript
 
 ### How to Build & Run
 
 ```sh
-$ cd barragewasm
-$ npm run asbuild
+$ cd barrage
+$ ./node_module/.bin/tsc
 $ npm start
 ```
 
-Browse http://localhost:3000
+Browse http://127.9.9.1:8080
