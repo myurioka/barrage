@@ -500,7 +500,7 @@ export class Game {
                 ctx.font = '28px myfont';
                 ctx.fillText('Congratuations!', 300, 420);
                 const _sec_str = Math.trunc(this.passedsecondtime).toString();
-                ctx.fillText(Math.trunc(this.passedsecondtime).toString() + ' sec.', 200, 480);
+                ctx.fillText(Math.trunc(this.passedsecondtime).toString() + ' sec.', 340, 480);
                 break;
             case Stage.playing:
                 // Draw boss
