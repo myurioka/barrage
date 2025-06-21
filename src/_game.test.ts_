@@ -1,9 +1,0 @@
-import { overap, Shot } from './game.js';
-
-test('OK overap', () => {
-	// Case 1: Far apart (existing test)
-	const a = new Shot(0, 0, 0, 0, 1, 1, 0);
-	const b = new Shot(1, 1, 0, 0, 1, 1, 0);
-	const result = overap(a, b);
-	expect(result).toBe(false);
-});

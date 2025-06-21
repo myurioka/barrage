@@ -411,6 +411,7 @@ export class Game {
 	startminisecondtime: number;
 	passedsecondtime: number;
 	passedminisecondtime: number;
+	maxpassedminisecondtime: number;
 
 	constructor() {
 		this.stage = Stage.openning;
@@ -434,6 +435,7 @@ export class Game {
 		this.startminisecondtime = Date.now();
 		this.passedsecondtime = this.startminisecondtime;
 		this.passedminisecondtime = this.startminisecondtime;
+		this.maxpassedminisecondtime = 0;
 		let _boss = new Boss(180, 60, 1, 0, BOSS_WIDTH, BOSS_HEIGHT, BOSS_MAX_HP);
 		this.bosses.push(_boss);
 	}
@@ -463,6 +465,7 @@ export class Game {
 		this.startminisecondtime = Date.now();
 		this.passedsecondtime = this.startminisecondtime;
 		this.passedminisecondtime = this.startminisecondtime;
+		this.maxpassedminisecondtime = 0;
 	}
 
 	update(): void {
@@ -476,12 +479,7 @@ export class Game {
 
 				this.passedsecondtime = Date.now() / 1000 - this.startsecondtime;
 				this.passedminisecondtime = Date.now() - this.startminisecondtime;
-
-				// Game Over
-				if (this.passedsecondtime >= LIMIT_TIME) {
-					this.stage = Stage.gameover;
-					break;
-				}
+				let _startprocesssecondtime = Date.now();
 
 				// bullet create
 
@@ -624,7 +622,11 @@ export class Game {
 					this.wait_time = 0;
 				}
 
-				break;
+				// mesure max passed time
+				this.maxpassedminisecondtime = Math.max(
+					Date.now() - _startprocesssecondtime,
+					this.maxpassedminisecondtime
+				);
 		}
 	}
 
@@ -662,13 +664,25 @@ export class Game {
 				break;
 			case Stage.gameclear:
 				// Draw Title
+				ctx.fillStyle = DEFAULT_COLOR;
 				ctx.font = '60px myfont';
 				ctx.fillText('GAME CLEAR', 150, 360);
 				ctx.fillStyle = DEFAULT_COLOR;
 				ctx.font = '28px myfont';
 				ctx.fillText('Congratuations!', 260, 420);
 				const _sec_str: string = Math.trunc(this.passedsecondtime).toString();
-				ctx.fillText(Math.trunc(this.passedsecondtime).toString() + ' sec.', 340, 500);
+				ctx.fillText(
+					'Your clear time: ' + Math.trunc(this.passedsecondtime).toString() + ' s.',
+					200,
+					500
+				);
+				ctx.fillStyle = LIGHT_GREEN_COLOR;
+				ctx.fillText(
+					'Max process time: ' + this.maxpassedminisecondtime.toString() + ' ms.',
+					180,
+					600
+				);
+
 				break;
 			case Stage.playing:
 				// Draw boss

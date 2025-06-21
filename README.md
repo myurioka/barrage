@@ -8,8 +8,8 @@ Programming Shooting retoro mini game in Typescript
 
 ### How to play (Control)
 
--   Mouse Operation : Ship Moving
--   Space key : Operates & Shooting
+-   Mouse move : Ship Moving
+-   Mouse click : Operates & Shooting start / stop
 -   Special mode: If you don't shoot for a while.
 
 ### Requirement

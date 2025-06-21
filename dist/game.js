@@ -332,6 +332,7 @@ export class Game {
     startminisecondtime;
     passedsecondtime;
     passedminisecondtime;
+    maxpassedminisecondtime;
     constructor() {
         this.stage = Stage.openning;
         this.shooting = false;
@@ -345,6 +346,7 @@ export class Game {
         this.startminisecondtime = Date.now();
         this.passedsecondtime = this.startminisecondtime;
         this.passedminisecondtime = this.startminisecondtime;
+        this.maxpassedminisecondtime = 0;
         let _boss = new Boss(180, 60, 1, 0, BOSS_WIDTH, BOSS_HEIGHT, BOSS_MAX_HP);
         this.bosses.push(_boss);
     }
@@ -364,6 +366,7 @@ export class Game {
         this.startminisecondtime = Date.now();
         this.passedsecondtime = this.startminisecondtime;
         this.passedminisecondtime = this.startminisecondtime;
+        this.maxpassedminisecondtime = 0;
     }
     update() {
         switch (this.stage) {
@@ -375,11 +378,7 @@ export class Game {
                 // passed time
                 this.passedsecondtime = Date.now() / 1000 - this.startsecondtime;
                 this.passedminisecondtime = Date.now() - this.startminisecondtime;
-                // Game Over
-                if (this.passedsecondtime >= LIMIT_TIME) {
-                    this.stage = Stage.gameover;
-                    break;
-                }
+                let _startprocesssecondtime = Date.now();
                 // bullet create
                 if (this.bullets.length < MAX_BULLET_NUMBER) {
                     const _x = this.bosses[0].x + BOSS_WIDTH / 2 - BULLET_WIDTH / 2;
@@ -465,7 +464,8 @@ export class Game {
                 if (this.shooting == true) {
                     this.wait_time = 0;
                 }
-                break;
+                // mesure max passed time
+                this.maxpassedminisecondtime = Math.max(Date.now() - _startprocesssecondtime, this.maxpassedminisecondtime);
         }
     }
     draw(canvas) {
@@ -496,13 +496,16 @@ export class Game {
                 break;
             case Stage.gameclear:
                 // Draw Title
+                ctx.fillStyle = DEFAULT_COLOR;
                 ctx.font = '60px myfont';
                 ctx.fillText('GAME CLEAR', 150, 360);
                 ctx.fillStyle = DEFAULT_COLOR;
                 ctx.font = '28px myfont';
                 ctx.fillText('Congratuations!', 260, 420);
                 const _sec_str = Math.trunc(this.passedsecondtime).toString();
-                ctx.fillText(Math.trunc(this.passedsecondtime).toString() + ' sec.', 340, 500);
+                ctx.fillText('Your clear time: ' + Math.trunc(this.passedsecondtime).toString() + ' s.', 200, 500);
+                ctx.fillStyle = LIGHT_GREEN_COLOR;
+                ctx.fillText('Max process time: ' + this.maxpassedminisecondtime.toString() + ' ms.', 180, 600);
                 break;
             case Stage.playing:
                 // Draw boss
