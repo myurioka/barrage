@@ -8,7 +8,7 @@ const MAX_SHOT_NUMBER = 100;
 const BULLET_WIDTH = 28;
 const BULLET_HEIGHT = 28;
 const BULLET_STRENGTH = 2;
-const SHIP_WIDTH = 44;
+const SHIP_WIDTH = 40;
 const SHIP_HEIGHT = 50;
 const SHIP_STEP = 1;
 const SHOT_WIDTH = 5;
@@ -16,7 +16,7 @@ const SHOT_HEIGHT = 5;
 const SHOT_SPEED = 10;
 const SUPER_SHOT_WIDTH = 100;
 const SUPER_SHOT_HEIGHT = 40;
-const SUPER_WAIT_TIME = 100; // enery chage time
+const SUPER_WAIT_TIME = 200; // enery chage time
 const SUPER_TIME = 200; // super mode time
 const LIMIT_TIME = 59; // second time
 const DEFAULT_COLOR = 'rgba(0,128, 0, 1.0)';
@@ -72,7 +72,7 @@ export class Shot {
         return false;
     }
     draw(ctx) {
-        let _x = this.x - SHOT_WIDTH / 2;
+        let _x = this.x;
         let _y = this.y;
         {
             ctx.beginPath();
@@ -97,11 +97,11 @@ export class SuperShot extends Shot {
         super(x, y, dx, dy, w, h, hp);
     }
     draw(ctx) {
-        let _x = this.x - SUPER_SHOT_WIDTH / 2;
+        let _x = this.x;
         let _y = this.y;
         {
             ctx.beginPath();
-            ctx.fillStyle = DEFAULT_COLOR;
+            ctx.fillStyle = LIGHT_YELLOR_GREEN;
             ctx.moveTo(_x, _y - SUPER_SHOT_HEIGHT);
             ctx.lineTo(_x + SUPER_SHOT_WIDTH, _y - SUPER_SHOT_HEIGHT);
             ctx.lineTo(_x + SUPER_SHOT_WIDTH, _y);
@@ -345,6 +345,8 @@ export class Game {
         this.startminisecondtime = Date.now();
         this.passedsecondtime = this.startminisecondtime;
         this.passedminisecondtime = this.startminisecondtime;
+        let _boss = new Boss(180, 60, 1, 0, BOSS_WIDTH, BOSS_HEIGHT, BOSS_MAX_HP);
+        this.bosses.push(_boss);
     }
     reset() {
         this.stage = Stage.openning;
@@ -395,12 +397,12 @@ export class Game {
                     }
                 }
                 // shot create
-                if (this.shooting == true) {
+                if (this.shooting) {
                     const _x = this.ship.x + SHIP_WIDTH / 2;
                     const _y = this.ship.y;
                     let _shot = new Shot(_x, _y, 0, SHOT_SPEED, SHOT_WIDTH, SHOT_HEIGHT, 1);
                     if (this.super_time > 0) {
-                        _shot = new SuperShot(_x, _y, 0, SHOT_SPEED, SUPER_SHOT_WIDTH, SUPER_SHOT_HEIGHT, 3);
+                        _shot = new SuperShot(_x - SUPER_SHOT_WIDTH / 2, _y, 0, SHOT_SPEED, SUPER_SHOT_WIDTH, SUPER_SHOT_HEIGHT, 3);
                         this.super_time -= 1;
                     }
                     this.shots.push(_shot);
@@ -495,12 +497,12 @@ export class Game {
             case Stage.gameclear:
                 // Draw Title
                 ctx.font = '60px myfont';
-                ctx.fillText('GAME CLEAR', 180, 360);
+                ctx.fillText('GAME CLEAR', 150, 360);
                 ctx.fillStyle = DEFAULT_COLOR;
                 ctx.font = '28px myfont';
-                ctx.fillText('Congratuations!', 300, 420);
+                ctx.fillText('Congratuations!', 260, 420);
                 const _sec_str = Math.trunc(this.passedsecondtime).toString();
-                ctx.fillText(Math.trunc(this.passedsecondtime).toString() + ' sec.', 340, 480);
+                ctx.fillText(Math.trunc(this.passedsecondtime).toString() + ' sec.', 340, 500);
                 break;
             case Stage.playing:
                 // Draw boss
@@ -546,11 +548,6 @@ export class Game {
                 this.reset();
                 break;
             case Stage.openning:
-                // create boss
-                if (this.bosses.length === 0) {
-                    let _boss = new Boss(180, 60, 1, 0, BOSS_WIDTH, BOSS_HEIGHT, BOSS_MAX_HP);
-                    this.bosses.push(_boss);
-                }
                 this.stage = Stage.playing;
                 break;
             case Stage.playing:
