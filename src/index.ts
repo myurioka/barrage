@@ -12,6 +12,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const game = new Game();
 
+	canvas.addEventListener('touchmove', (event) => {
+		const allTouches = event.touches;
+		if (allTouches.length > 0) {
+			const firstTouch = allTouches[0];
+			const mouse_x = firstTouch.clientX;
+			game.ship.move(mouse_x);
+		}
+	});
+
 	canvas.addEventListener('mousedown', (event) => {
 		game.shot();
 	});
