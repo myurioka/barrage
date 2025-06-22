@@ -23,13 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function step() {
         let timestamp = new Date().getTime();
         let delta = timestamp - last_frame;
-        while (delta >= SKIP_DRAW_FRAME) {
-            //while (delta >= 0) {
+        while (delta >= 0) {
             game.update();
             delta -= SKIP_DRAW_FRAME;
         }
         game.draw(canvas);
-        last_frame = new Date().getTime();
+        last_frame = timestamp;
         if (!done) {
             window.requestAnimationFrame(step);
         }
