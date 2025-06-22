@@ -1,10 +1,8 @@
 import { Game } from './game.js';
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('canvas');
-    const fps = 60;
-    let now = 0;
+    const SKIP_DRAW_FRAME = 16;
     let last_frame = Date.now();
-    let frame = 0;
     let done = false;
     const game = new Game();
     canvas.addEventListener('touchmove', (event) => {
@@ -24,14 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     function step() {
         let timestamp = new Date().getTime();
-        let delta = Math.floor(timestamp - last_frame);
-        while (delta >= 0) {
+        let delta = timestamp - last_frame;
+        while (delta >= SKIP_DRAW_FRAME) {
+            //while (delta >= 0) {
             game.update();
-            delta -= 1000.0 / fps;
+            delta -= SKIP_DRAW_FRAME;
         }
         game.draw(canvas);
-        last_frame = timestamp;
-        frame += 1;
+        last_frame = new Date().getTime();
         if (!done) {
             window.requestAnimationFrame(step);
         }

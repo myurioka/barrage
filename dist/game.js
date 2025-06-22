@@ -4,7 +4,6 @@ const BOSS_WIDTH = 225; // ENEMY BOSS WIDTH for hit judgement
 const BOSS_HEIGHT = 225; // ENEMY BOSS HEIGHT for hit judgement
 const BOSS_MAX_HP = 999; // ENEMY BOSS MAX Helath Point
 const MAX_BULLET_NUMBER = 500; // Number of BULLETS:w
-const MAX_SHOT_NUMBER = 100;
 const BULLET_WIDTH = 28;
 const BULLET_HEIGHT = 28;
 const BULLET_STRENGTH = 2;
@@ -18,7 +17,6 @@ const SUPER_SHOT_WIDTH = 100;
 const SUPER_SHOT_HEIGHT = 40;
 const SUPER_WAIT_TIME = 200; // enery chage time
 const SUPER_TIME = 200; // super mode time
-const LIMIT_TIME = 59; // second time
 const DEFAULT_COLOR = 'rgba(0,128, 0, 1.0)';
 const LIGHT_GREEN_COLOR = 'rgba(226,238,197,1.0)';
 const GREEN_DARK_LIGHT = 'rgba(17,31,17,1.0)';
@@ -333,6 +331,7 @@ export class Game {
     passedsecondtime;
     passedminisecondtime;
     maxpassedminisecondtime;
+    maxpassedminisecondtime_draw;
     constructor() {
         this.stage = Stage.openning;
         this.shooting = false;
@@ -347,6 +346,7 @@ export class Game {
         this.passedsecondtime = this.startminisecondtime;
         this.passedminisecondtime = this.startminisecondtime;
         this.maxpassedminisecondtime = 0;
+        this.maxpassedminisecondtime_draw = 0;
         let _boss = new Boss(180, 60, 1, 0, BOSS_WIDTH, BOSS_HEIGHT, BOSS_MAX_HP);
         this.bosses.push(_boss);
     }
@@ -367,6 +367,7 @@ export class Game {
         this.passedsecondtime = this.startminisecondtime;
         this.passedminisecondtime = this.startminisecondtime;
         this.maxpassedminisecondtime = 0;
+        this.maxpassedminisecondtime_draw = 0;
     }
     update() {
         switch (this.stage) {
@@ -376,7 +377,7 @@ export class Game {
                 break;
             case Stage.playing:
                 // passed time
-                this.passedsecondtime = Date.now() / 1000 - this.startsecondtime;
+                this.passedsecondtime = Math.trunc(Date.now() / 1000) - this.startsecondtime;
                 this.passedminisecondtime = Date.now() - this.startminisecondtime;
                 let _startprocesssecondtime = Date.now();
                 // bullet create
@@ -469,6 +470,7 @@ export class Game {
         }
     }
     draw(canvas) {
+        let _startprocesssecondtime = Date.now();
         const ctx = canvas.getContext('2d');
         if (!ctx) {
             return;
@@ -502,12 +504,13 @@ export class Game {
                 ctx.fillStyle = DEFAULT_COLOR;
                 ctx.font = '28px myfont';
                 ctx.fillText('Congratuations!', 260, 420);
-                const _sec_str = Math.trunc(this.passedsecondtime).toString();
-                ctx.fillText('Your clear time: ' + Math.trunc(this.passedsecondtime).toString() + ' s.', 200, 500);
+                ctx.fillText('Your clear time: ' + Math.floor(this.passedsecondtime).toString() + ' s.', 200, 500);
                 ctx.fillStyle = LIGHT_GREEN_COLOR;
-                ctx.fillText('Max process time: ' + this.maxpassedminisecondtime.toString() + ' ms.', 180, 600);
+                ctx.fillText('max update time: ' + this.maxpassedminisecondtime.toString() + ' ms.', 180, 600);
+                ctx.fillText('max draw time:    ' + this.maxpassedminisecondtime_draw.toString() + ' ms.', 180, 650);
                 break;
             case Stage.playing:
+                let _star_draw_time = Date.now();
                 // Draw boss
                 this.bosses[0].draw(ctx);
                 // Draw bullets
@@ -531,6 +534,8 @@ export class Game {
                 ctx.fillStyle = LIGHT_GREEN_COLOR;
                 let _bullet_number = this.bullets.length.toString();
                 ctx.fillText('Bullets: ' + _bullet_number, 30, 90);
+                // mesure max passed time
+                this.maxpassedminisecondtime_draw = Math.max(Date.now() - _startprocesssecondtime, this.maxpassedminisecondtime_draw);
         }
     }
     // time
